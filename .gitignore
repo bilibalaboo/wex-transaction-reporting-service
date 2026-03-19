@@ -1,0 +1,22 @@
+# Build outputs
+bin/
+obj/
+
+# Rider
+.idea/
+
+# VS
+.vs/
+*.user
+
+# dotnet
+*.suo
+*.userprefs
+.DS_Store
+
+# NuGet
+*.nupkg
+packages/
+
+# Logs
+*.log

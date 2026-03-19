@@ -4,12 +4,12 @@ namespace Wex.TransactionReporting.Application.Abstractions;
 
 public interface IExchangeRateService
 {
-    ValueTask<Result<ExchangeRateResult>> GetForTransactionDateAsync(
+    Task<Result<ExchangeRateResult>> GetForTransactionDateAsync(
         string currency,
         DateOnly transactionDate,
         CancellationToken cancellationToken = default);
 
-    ValueTask<Result<ExchangeRateResult>> GetLatestAsync(
+    Task<Result<ExchangeRateResult>> GetLatestAsync(
         string currency,
         CancellationToken cancellationToken = default);
 }
