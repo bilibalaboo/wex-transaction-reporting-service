@@ -16,7 +16,7 @@ public sealed class TreasuryExchangeRateService(
     IOptions<TreasuryApiOptions> options,
     ILogger<TreasuryExchangeRateService> logger) : IExchangeRateService
 {
-    private const string Fields = "country_currency_desc,exchange_rate,effective_date";
+    private const string Fields = "country_currency_desc,exchange_rate,record_date";
 
     private HttpClient CreateClient() =>
         httpClientFactory.CreateClient(nameof(TreasuryExchangeRateService));
@@ -30,8 +30,8 @@ public sealed class TreasuryExchangeRateService(
 
         var url = BuildUrl(options.Value.BaseUrl,
             $"country_currency_desc:eq:{Uri.EscapeDataString(currency)}," +
-            $"effective_date:lte:{transactionDate:yyyy-MM-dd}," +
-            $"effective_date:gte:{windowStart:yyyy-MM-dd}");
+            $"record_date:lte:{transactionDate:yyyy-MM-dd}," +
+            $"record_date:gte:{windowStart:yyyy-MM-dd}");
 
         return await FetchLatestRate(url, currency, cancellationToken);
     }
@@ -109,5 +109,5 @@ public sealed class TreasuryExchangeRateService(
     }
 
     private static string BuildUrl(string baseUrl, string filter) =>
-        $"{baseUrl}?fields={Fields}&filter={filter}&sort=-effective_date&page[size]=1";
+        $"{baseUrl}?fields={Fields}&filter={filter}&sort=-record_date&page[size]=1";
 }

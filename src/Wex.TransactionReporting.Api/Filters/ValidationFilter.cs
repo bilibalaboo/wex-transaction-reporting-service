@@ -21,7 +21,7 @@ public sealed class ValidationFilter<T>(IValidator<T> validator) : IEndpointFilt
 
         var validation = await validator.ValidateAsync(argument, context.HttpContext.RequestAborted);
         if (!validation.IsValid)
-            return Results.ValidationProblem(validation.ToDictionary());
+            return Results.ValidationProblem(validation.ToDictionary(), statusCode: StatusCodes.Status422UnprocessableEntity);
 
         return await next(context);
     }

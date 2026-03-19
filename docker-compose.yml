@@ -8,7 +8,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=wex;Username=postgres;Password=postgres
       - ConnectionStrings__Redis=redis:6379
-      - TreasuryApi__BaseUrl=https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/rates_of_exchange
+      - TreasuryApi__BaseUrl=https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/rates_of_exchange
       - OpenTelemetry__Endpoint=http://otel-collector:4317
     depends_on:
       db:

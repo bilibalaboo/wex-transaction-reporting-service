@@ -6,7 +6,7 @@ internal static partial class TreasuryLog
 {
     [LoggerMessage(Level = LogLevel.Information, Message = "Fetching Treasury exchange rate for {Currency}")]
     internal static partial void FetchingRate(this ILogger logger, string currency);
-
+    
     [LoggerMessage(Level = LogLevel.Warning, Message = "No Treasury exchange rate found for {Currency}")]
     internal static partial void RateNotFound(this ILogger logger, string currency);
 

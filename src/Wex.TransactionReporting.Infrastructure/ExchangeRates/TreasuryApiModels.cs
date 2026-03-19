@@ -17,7 +17,7 @@ internal sealed class TreasuryRateEntry
     [JsonPropertyName("exchange_rate")]
     public string ExchangeRate { get; init; } = string.Empty;
 
-    [JsonPropertyName("effective_date")]
+    [JsonPropertyName("record_date")]
     public string EffectiveDate { get; init; } = string.Empty;
 }
 

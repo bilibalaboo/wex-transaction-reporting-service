@@ -19,7 +19,10 @@
       "Bash(docker run:*)",
       "Bash(powershell -Command \"\\(Invoke-WebRequest -Uri 'https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/rates_of_exchange' -UseBasicParsing\\).StatusCode\" 2>&1)",
       "Bash(docker compose:*)",
-      "Bash(powershell -Command \"\n[System.Net.ServicePointManager]::SecurityProtocol = 'Tls12'\ntry {\n  \\\\$r = [System.Net.WebClient]::new\\(\\)\n  \\\\$r.Headers.Add\\('User-Agent','Mozilla/5.0'\\)\n  \\\\$data = \\\\$r.DownloadString\\('https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/rates_of_exchange?fields=country_currency_desc,effective_date&sort=-effective_date&page[size]=30'\\)\n  Write-Output \\\\$data\n} catch { Write-Output \\\\$_.Exception.Message }\n\")"
+      "Bash(powershell -Command \"\n[System.Net.ServicePointManager]::SecurityProtocol = 'Tls12'\ntry {\n  \\\\$r = [System.Net.WebClient]::new\\(\\)\n  \\\\$r.Headers.Add\\('User-Agent','Mozilla/5.0'\\)\n  \\\\$data = \\\\$r.DownloadString\\('https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/rates_of_exchange?fields=country_currency_desc,effective_date&sort=-effective_date&page[size]=30'\\)\n  Write-Output \\\\$data\n} catch { Write-Output \\\\$_.Exception.Message }\n\")",
+      "Bash(curl:*)",
+      "Bash(powershell -Command \"\ntry {\n    \\\\$response = Invoke-WebRequest -Uri 'https://fiscaldata.treasury.gov/api-documentation/' -UseBasicParsing -TimeoutSec 10\n    Write-Output \\\\$response.StatusCode\n    Write-Output \\(\\\\$response.Content | Select-String 'rates_of_exchange' | Select-Object -First 5\\)\n} catch {\n    Write-Output \\\\$_.Exception.Message\n}\n\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"E:\\\\Interview\\\\Wex.TransactionReporting.Api\\\\test-api.ps1\")"
     ]
   }
 }
