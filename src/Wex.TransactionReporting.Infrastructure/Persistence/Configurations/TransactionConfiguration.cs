@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wex.TransactionReporting.Domain.Entities;
 
 namespace Wex.TransactionReporting.Infrastructure.Persistence.Configurations;
 
+[ExcludeFromCodeCoverage]
 public sealed class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 {
     public void Configure(EntityTypeBuilder<Transaction> builder)

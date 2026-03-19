@@ -6,3 +6,6 @@
 - **Testing Framework:** xUnit + FluentAssertions. Follow the AAA (Arrange, Act, Assert) pattern.
 - **Mocking:** Use `NSubstitute` to mock external dependencies (e.g., `IExchangeRateService`, `ICardRepository`).
 - **Coverage Focus:** Prioritize unit testing for the 6-month lookback logic, Available Balance calculations, exchange rate conversion, and Domain Entity invariants.
+- **Coverage Threshold:** Enforce a minimum of **80% line coverage** on every Docker build using `coverlet.msbuild` (`/p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=total`). The build must fail if the threshold is not met.
+- **Coverage Exclusions:** Apply `[ExcludeFromCodeCoverage]` to classes that are genuinely untestable without infrastructure (database, HTTP, DI container). Excluded categories:
+  - Do **not** exclude application handlers, domain entities, validators, or filters — these must be covered.

@@ -130,6 +130,52 @@ public sealed class GetCardBalanceQueryHandlerTests
     }
 
     [Fact]
+    public async Task Handle_WhenSpendEqualsLimit_ReturnsZeroAvailableBalance()
+    {
+        var card = Card.Create(1000m).Value!;
+        var rate = new ExchangeRateResult("EUR", new DateOnly(2024, 6, 15), 0.92m);
+
+        _cardRepository.GetByIdAsync(card.Id, Arg.Any<CancellationToken>()).Returns(card);
+        _transactionRepository.GetTotalSpendByCardIdAsync(card.Id, Arg.Any<CancellationToken>()).Returns(1000m);
+        _exchangeRateService.GetLatestAsync("EUR", Arg.Any<CancellationToken>())
+            .Returns(Result<ExchangeRateResult>.Success(rate));
+
+        var result = await _handler.Handle(new GetCardBalanceQuery(card.Id, "EUR"));
+
+        result.IsSuccess.Should().BeTrue();
+        result.Value!.AvailableBalanceUsd.Should().Be(0m);
+        result.Value.AvailableBalanceConverted.Should().Be(0m);
+    }
+
+    [Fact]
+    public async Task Handle_WhenSpendExceedsLimit_ReturnsNegativeAvailableBalance()
+    {
+        var card = Card.Create(1000m).Value!;
+        var rate = new ExchangeRateResult("EUR", new DateOnly(2024, 6, 15), 1.0m);
+
+        _cardRepository.GetByIdAsync(card.Id, Arg.Any<CancellationToken>()).Returns(card);
+        _transactionRepository.GetTotalSpendByCardIdAsync(card.Id, Arg.Any<CancellationToken>()).Returns(1200m);
+        _exchangeRateService.GetLatestAsync("EUR", Arg.Any<CancellationToken>())
+            .Returns(Result<ExchangeRateResult>.Success(rate));
+
+        var result = await _handler.Handle(new GetCardBalanceQuery(card.Id, "EUR"));
+
+        result.IsSuccess.Should().BeTrue();
+        result.Value!.AvailableBalanceUsd.Should().Be(-200m);
+    }
+
+    [Fact]
+    public async Task Handle_WhenCardNotFound_DoesNotCallTransactionRepository()
+    {
+        _cardRepository.GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Card?)null);
+
+        await _handler.Handle(new GetCardBalanceQuery(Guid.NewGuid(), "EUR"));
+
+        await _transactionRepository.DidNotReceive()
+            .GetTotalSpendByCardIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task Handle_UsesLatestRate_NotTransactionDateRate()
     {
         var card = Card.Create(1000m).Value!;

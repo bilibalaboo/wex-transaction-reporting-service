@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Wex.TransactionReporting.Api.Models;
@@ -7,6 +8,7 @@ using Wex.TransactionReporting.Application.Transactions.Queries.GetTransactionIn
 
 namespace Wex.TransactionReporting.Api.Serialization;
 
+[ExcludeFromCodeCoverage]
 [JsonSerializable(typeof(CreateCardCommand))]
 [JsonSerializable(typeof(StoreTransactionRequest))]
 [JsonSerializable(typeof(CardBalanceResponse))]

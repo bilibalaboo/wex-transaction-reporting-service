@@ -112,4 +112,40 @@ if ($r.StatusCode -eq 200) {
 $r = Get-Status "$base/cards/00000000-0000-0000-0000-000000000000/balance`?currency=Canada-Dollar"
 Check '14. Card not found (balance)' $r.StatusCode 404
 
+# 15. Missing creditLimit field
+$r = Get-Status "$base/cards" POST '{}'
+Check '15. Missing creditLimit field' $r.StatusCode 422
+
+# 16. Missing description on transaction
+$r = Get-Status "$base/cards/$cardId/transactions" POST '{"transactionDate":"2025-10-01","amountUsd":50}' @{'Idempotency-Key'="missing-desc-$([guid]::NewGuid())"}
+Check '16. Missing description' $r.StatusCode 422
+
+# 17. Missing transactionDate
+$r = Get-Status "$base/cards/$cardId/transactions" POST '{"description":"No date","amountUsd":50}' @{'Idempotency-Key'="missing-date-$([guid]::NewGuid())"}
+Check '17. Missing transactionDate' $r.StatusCode 422
+
+# 18. Unknown currency (transaction)
+$r = Get-Status "$base/transactions/$txId`?currency=Narnia-Coin"
+Check '18. Unknown currency (get transaction)' $r.StatusCode 404
+
+# 19. Unknown currency (balance)
+$r = Get-Status "$base/cards/$cardId/balance`?currency=Narnia-Coin"
+Check '19. Unknown currency (get balance)' $r.StatusCode 404
+
+# 20. Card with no transactions — full credit limit available
+$r = Get-Status "$base/cards" POST '{"creditLimit":1000}'
+$emptyCardId = $r.Content.Trim('"')
+$r = Get-Status "$base/cards/$emptyCardId/balance`?currency=Euro Zone-Euro"
+Check '20. Card with no transactions (full balance)' $r.StatusCode 200
+if ($r.StatusCode -eq 200) {
+    $j = $r.Content | ConvertFrom-Json
+    if ($j.availableBalanceUsd -eq 1000) {
+        Write-Host "[PASS] 20b. Full credit limit returned (availableBalanceUsd=1000)" -ForegroundColor Green
+        $script:pass++
+    } else {
+        Write-Host "[FAIL] 20b. Expected availableBalanceUsd=1000, got $($j.availableBalanceUsd)" -ForegroundColor Red
+        $script:fail++
+    }
+}
+
 Write-Host "`n=== Results: $pass passed, $fail failed ===" -ForegroundColor Cyan

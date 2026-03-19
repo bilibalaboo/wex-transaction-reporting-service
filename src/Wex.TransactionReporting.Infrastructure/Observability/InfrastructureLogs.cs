@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace Wex.TransactionReporting.Infrastructure.Observability;
 
+[ExcludeFromCodeCoverage]
 internal static partial class TreasuryLog
 {
     [LoggerMessage(Level = LogLevel.Information, Message = "Fetching Treasury exchange rate for {Currency}")]
@@ -14,6 +16,7 @@ internal static partial class TreasuryLog
     internal static partial void RequestFailed(this ILogger logger, string currency, double elapsedMs, Exception ex);
 }
 
+[ExcludeFromCodeCoverage]
 internal static partial class CacheLog
 {
     [LoggerMessage(Level = LogLevel.Debug, Message = "Exchange rate cache hit for key {CacheKey}")]
@@ -23,6 +26,7 @@ internal static partial class CacheLog
     internal static partial void CacheMiss(this ILogger logger, string cacheKey);
 }
 
+[ExcludeFromCodeCoverage]
 internal static partial class TransactionLog
 {
     [LoggerMessage(Level = LogLevel.Information, Message = "Transaction {TransactionId} created for card {CardId}")]

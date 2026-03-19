@@ -87,4 +87,20 @@ public sealed class StoreTransactionCommandHandlerTests
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be("Transaction.InvalidAmount");
     }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-10)]
+    public async Task Handle_WithInvalidAmount_DoesNotSave(decimal amount)
+    {
+        var card = Card.Create(1000m).Value!;
+        _cardRepository.GetByIdAsync(card.Id, Arg.Any<CancellationToken>()).Returns(card);
+
+        var command = new StoreTransactionCommand(card.Id, "Coffee", new DateOnly(2024, 6, 15), amount, Guid.NewGuid().ToString());
+
+        await _handler.Handle(command);
+
+        await _transactionRepository.DidNotReceive().AddAsync(Arg.Any<Transaction>(), Arg.Any<CancellationToken>());
+        await _transactionRepository.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
+    }
 }

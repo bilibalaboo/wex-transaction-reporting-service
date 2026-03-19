@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
 
 namespace Wex.TransactionReporting.Infrastructure.Observability;
 
+[ExcludeFromCodeCoverage]
 public static class AppMeter
 {
     public const string Name = "Wex.TransactionReporting";
