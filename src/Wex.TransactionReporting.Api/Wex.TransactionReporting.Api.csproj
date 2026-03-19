@@ -4,19 +4,17 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>preview</LangVersion>
-    <!-- AOT: fallback to trimmed publish if full AOT hits EF Core limits -->
-    <PublishTrimmed>true</PublishTrimmed>
+    <LangVersion>latest</LangVersion>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
-    <PublishAot>true</PublishAot>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25258.110" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.13.11" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
   </ItemGroup>

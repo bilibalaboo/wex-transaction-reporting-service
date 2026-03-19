@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["src/Wex.TransactionReporting.Api/Wex.TransactionReporting.Api.csproj", "src/Wex.TransactionReporting.Api/"]
@@ -6,22 +6,19 @@ COPY ["src/Wex.TransactionReporting.Application/Wex.TransactionReporting.Applica
 COPY ["src/Wex.TransactionReporting.Domain/Wex.TransactionReporting.Domain.csproj", "src/Wex.TransactionReporting.Domain/"]
 COPY ["src/Wex.TransactionReporting.Infrastructure/Wex.TransactionReporting.Infrastructure.csproj", "src/Wex.TransactionReporting.Infrastructure/"]
 
-RUN dotnet restore "src/Wex.TransactionReporting.Api/Wex.TransactionReporting.Api.csproj" -r linux-musl-x64
+RUN dotnet restore "src/Wex.TransactionReporting.Api/Wex.TransactionReporting.Api.csproj"
 
 COPY src/ src/
 
 RUN dotnet publish "src/Wex.TransactionReporting.Api/Wex.TransactionReporting.Api.csproj" \
     -c Release \
-    -r linux-musl-x64 \
     --no-restore \
-    /p:PublishAot=true \
-    /p:StripSymbols=true \
     -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/runtime-deps:10.0-preview-alpine AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 USER appuser
 
 COPY --from=build /app/publish .
@@ -29,4 +26,4 @@ COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
-ENTRYPOINT ["./Wex.TransactionReporting.Api"]
+ENTRYPOINT ["dotnet", "Wex.TransactionReporting.Api.dll"]

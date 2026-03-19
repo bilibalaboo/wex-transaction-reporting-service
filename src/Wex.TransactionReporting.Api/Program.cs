@@ -13,6 +13,7 @@ using Wex.TransactionReporting.Application.Cards.Queries.GetCardBalance;
 using Wex.TransactionReporting.Application.Transactions.Commands.StoreTransaction;
 using Wex.TransactionReporting.Application.Transactions.Queries.GetTransactionInCurrency;
 using Wex.TransactionReporting.Infrastructure;
+using Scalar.AspNetCore;
 using Wex.TransactionReporting.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -64,15 +65,14 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.MapOpenApi();
+app.MapScalarApiReference();
 app.MapCardEndpoints();
 app.MapTransactionEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-#pragma warning disable IL3050
     await db.Database.MigrateAsync();
-#pragma warning restore IL3050
 }
 
 app.Run();

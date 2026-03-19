@@ -61,6 +61,14 @@ public sealed class TreasuryExchangeRateService(
         {
             using var client = CreateClient();
             using var response = await client.GetAsync(url, cancellationToken);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                logger.RateNotFound(currency);
+                activity?.SetStatus(ActivityStatusCode.Error, "No rate found");
+                return DomainErrors.ExchangeRate.NotFound;
+            }
+
             response.EnsureSuccessStatusCode();
 
             await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);

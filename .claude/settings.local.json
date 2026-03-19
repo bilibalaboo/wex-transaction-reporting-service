@@ -13,7 +13,13 @@
       "Bash(find C:/Users/houji/.nuget/packages/serilog.sinks.opentelemetry/ -name *.cs)",
       "Bash(find C:/Users/houji/.nuget/packages/serilog.sinks.opentelemetry/ -name OtlpProtocol*)",
       "Bash(dotnet test:*)",
-      "Bash(dotnet ef:*)"
+      "Bash(dotnet ef:*)",
+      "Bash(dotnet publish:*)",
+      "Bash(docker pull:*)",
+      "Bash(docker run:*)",
+      "Bash(powershell -Command \"\\(Invoke-WebRequest -Uri 'https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/rates_of_exchange' -UseBasicParsing\\).StatusCode\" 2>&1)",
+      "Bash(docker compose:*)",
+      "Bash(powershell -Command \"\n[System.Net.ServicePointManager]::SecurityProtocol = 'Tls12'\ntry {\n  \\\\$r = [System.Net.WebClient]::new\\(\\)\n  \\\\$r.Headers.Add\\('User-Agent','Mozilla/5.0'\\)\n  \\\\$data = \\\\$r.DownloadString\\('https://api.fiscaldata.treasury.gov/services/api/v1/accounting/od/rates_of_exchange?fields=country_currency_desc,effective_date&sort=-effective_date&page[size]=30'\\)\n  Write-Output \\\\$data\n} catch { Write-Output \\\\$_.Exception.Message }\n\")"
     ]
   }
 }
