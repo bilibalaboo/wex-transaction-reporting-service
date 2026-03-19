@@ -12,7 +12,7 @@ My role throughout the process:
 - **Solution Architect** — defined the overall structure, layer boundaries, and key design decisions (Clean Architecture, CQRS without MediatR, rich domain model with SQL-side aggregation, Cache-Aside pattern)
 - **Technical Supervisor** — guided trade-off discussions (ValueTask vs Task, typed vs named HttpClient, decorator pattern, Specification pattern), and made the final call on each
 - **Code Reviewer** — reviewed every file generated, identified issues (incorrect API URL, wrong HTTP status codes, missing `.dockerignore`, AOT/trimming incompatibilities), and directed fixes
-- **QA** — ran the end-to-end test script, debugged failures, and confirmed all 14 test cases pass against live infrastructure
+- **QA** — ran the end-to-end test script, debugged failures, and confirmed all 21 test cases pass against live infrastructure
 
 Claude generated the majority of the implementation code under my direction. All architectural decisions, design reviews, bug identification, and quality gates were driven by me.
 
@@ -104,7 +104,9 @@ Browse all valid values: `https://api.fiscaldata.treasury.gov/services/api/fisca
 dotnet test
 ```
 
-Covers domain entity invariants, all application handler scenarios (happy path, not found, invalid input, exchange rate failure), and idempotency behaviour. Uses xUnit, FluentAssertions, and NSubstitute.
+Covers domain entity invariants, all application handler scenarios (happy path, not found, invalid input, exchange rate failure), boundary conditions (zero/negative balance), and short-circuit behaviour. Uses xUnit, FluentAssertions, and NSubstitute.
+
+Unit tests are also executed automatically as part of the Docker build (`docker compose up --build`). The build will fail if line coverage drops below **80%**.
 
 ### End-to-End Tests
 
@@ -114,11 +116,13 @@ Requires the Docker stack to be running.
 powershell -ExecutionPolicy Bypass -File test-api.ps1
 ```
 
-Runs 14 test cases against the live API:
-- Card creation and validation
-- Transaction storage, validation, and idempotency
-- Currency conversion with live Treasury rates
+Runs 21 test cases against the live API:
+- Card creation and validation (including missing fields)
+- Transaction storage, validation, idempotency, and missing required fields
+- Currency conversion with live Treasury rates (EUR, CAD)
 - 6-month lookback window enforcement
+- Card balance with and without transactions
+- Unknown currency handling
 - All 404 / 422 error cases
 
 ---
