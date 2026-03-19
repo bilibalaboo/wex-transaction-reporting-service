@@ -3,11 +3,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 using Polly;
 using System.Net;
 using Wex.TransactionReporting.Application.Abstractions;
 using Wex.TransactionReporting.Domain.Repositories;
 using Wex.TransactionReporting.Infrastructure.ExchangeRates;
+using Wex.TransactionReporting.Infrastructure.Observability;
 using Wex.TransactionReporting.Infrastructure.Options;
 using Wex.TransactionReporting.Infrastructure.Persistence;
 using Wex.TransactionReporting.Infrastructure.Persistence.Repositories;
@@ -71,4 +74,10 @@ public static class DependencyInjection
 
         return services;
     }
+
+    public static TracerProviderBuilder AddInfrastructureTracing(this TracerProviderBuilder builder) =>
+        builder.AddSource(AppActivitySource.Name);
+
+    public static MeterProviderBuilder AddInfrastructureMetrics(this MeterProviderBuilder builder) =>
+        builder.AddMeter(AppMeter.Name);
 }

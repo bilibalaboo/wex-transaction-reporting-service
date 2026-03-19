@@ -1,16 +1,20 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wex.TransactionReporting.Application.Abstractions;
 using Wex.TransactionReporting.Domain.Common;
 using Wex.TransactionReporting.Domain.Errors;
+using Wex.TransactionReporting.Infrastructure.Observability;
 using Wex.TransactionReporting.Infrastructure.Options;
 
 namespace Wex.TransactionReporting.Infrastructure.ExchangeRates;
 
 public sealed class TreasuryExchangeRateService(
     IHttpClientFactory httpClientFactory,
-    IOptions<TreasuryApiOptions> options) : IExchangeRateService
+    IOptions<TreasuryApiOptions> options,
+    ILogger<TreasuryExchangeRateService> logger) : IExchangeRateService
 {
     private const string Fields = "country_currency_desc,exchange_rate,effective_date";
 
@@ -29,7 +33,7 @@ public sealed class TreasuryExchangeRateService(
             $"effective_date:lte:{transactionDate:yyyy-MM-dd}," +
             $"effective_date:gte:{windowStart:yyyy-MM-dd}");
 
-        return await FetchLatestRate(url, cancellationToken);
+        return await FetchLatestRate(url, currency, cancellationToken);
     }
 
     public async Task<Result<ExchangeRateResult>> GetLatestAsync(
@@ -39,31 +43,61 @@ public sealed class TreasuryExchangeRateService(
         var url = BuildUrl(options.Value.BaseUrl,
             $"country_currency_desc:eq:{Uri.EscapeDataString(currency)}");
 
-        return await FetchLatestRate(url, cancellationToken);
+        return await FetchLatestRate(url, currency, cancellationToken);
     }
 
     private async Task<Result<ExchangeRateResult>> FetchLatestRate(
         string url,
+        string currency,
         CancellationToken cancellationToken)
     {
-        using var client = CreateClient();
-        using var response = await client.GetAsync(url, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        logger.FetchingRate(currency);
 
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-        var apiResponse = await JsonSerializer.DeserializeAsync(
-            stream,
-            InfrastructureJsonContext.Default.TreasuryApiResponse,
-            cancellationToken);
+        using var activity = AppActivitySource.Instance.StartActivity("treasury_api.fetch_rate");
+        activity?.SetTag("currency", currency);
 
-        var entry = apiResponse?.Data.FirstOrDefault();
-        if (entry is null)
-            return DomainErrors.ExchangeRate.NotFound;
+        var start = Stopwatch.GetTimestamp();
+        try
+        {
+            using var client = CreateClient();
+            using var response = await client.GetAsync(url, cancellationToken);
+            response.EnsureSuccessStatusCode();
 
-        return new ExchangeRateResult(
-            Currency: entry.CountryCurrencyDesc,
-            EffectiveDate: DateOnly.Parse(entry.EffectiveDate, CultureInfo.InvariantCulture),
-            Rate: decimal.Parse(entry.ExchangeRate, CultureInfo.InvariantCulture));
+            await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+            var apiResponse = await JsonSerializer.DeserializeAsync(
+                stream,
+                InfrastructureJsonContext.Default.TreasuryApiResponse,
+                cancellationToken);
+
+            var entry = apiResponse?.Data.FirstOrDefault();
+            if (entry is null)
+            {
+                logger.RateNotFound(currency);
+                activity?.SetStatus(ActivityStatusCode.Error, "No rate found");
+                return DomainErrors.ExchangeRate.NotFound;
+            }
+
+            activity?.SetStatus(ActivityStatusCode.Ok);
+            return new ExchangeRateResult(
+                Currency: entry.CountryCurrencyDesc,
+                EffectiveDate: DateOnly.Parse(entry.EffectiveDate, CultureInfo.InvariantCulture),
+                Rate: decimal.Parse(entry.ExchangeRate, CultureInfo.InvariantCulture));
+        }
+        catch (Exception ex)
+        {
+            var elapsed = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
+            logger.RequestFailed(currency, elapsed, ex);
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
+            throw;
+        }
+        finally
+        {
+            var elapsed = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
+            AppMeter.TreasuryApiRequestDuration.Record(elapsed, new TagList
+            {
+                { "currency", currency }
+            });
+        }
     }
 
     private static string BuildUrl(string baseUrl, string filter) =>
