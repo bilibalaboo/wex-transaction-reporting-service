@@ -1,0 +1,16 @@
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\bin\Debug\net10.0\Wex.TransactionReporting.Application.deps.json
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\bin\Debug\net10.0\Wex.TransactionReporting.Application.dll
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\bin\Debug\net10.0\Wex.TransactionReporting.Application.pdb
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\bin\Debug\net10.0\Wex.TransactionReporting.Domain.dll
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\bin\Debug\net10.0\Wex.TransactionReporting.Domain.pdb
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.csproj.AssemblyReference.cache
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.GeneratedMSBuildEditorConfig.editorconfig
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.AssemblyInfoInputs.cache
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.AssemblyInfo.cs
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.csproj.CoreCompileInputs.cache
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.sourcelink.json
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.Tran.15AD6E00.Up2Date
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.dll
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\refint\Wex.TransactionReporting.Application.dll
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\Wex.TransactionReporting.Application.pdb
+E:\Interview\Wex.TransactionReporting.Api\src\Wex.TransactionReporting.Application\obj\Debug\net10.0\ref\Wex.TransactionReporting.Application.dll

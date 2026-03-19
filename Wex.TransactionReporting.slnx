@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Wex.TransactionReporting.Api/Wex.TransactionReporting.Api.csproj" />
+    <Project Path="src/Wex.TransactionReporting.Application/Wex.TransactionReporting.Application.csproj" />
+    <Project Path="src/Wex.TransactionReporting.Domain/Wex.TransactionReporting.Domain.csproj" />
+    <Project Path="src/Wex.TransactionReporting.Infrastructure/Wex.TransactionReporting.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Wex.TransactionReporting.Application.Tests/Wex.TransactionReporting.Application.Tests.csproj" />
+    <Project Path="tests/Wex.TransactionReporting.Domain.Tests/Wex.TransactionReporting.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

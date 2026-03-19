@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <!-- AOT: fallback to trimmed publish if full AOT hits EF Core limits -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <PublishAot>true</PublishAot>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25258.110" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.12.0" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wex.TransactionReporting.Application\Wex.TransactionReporting.Application.csproj" />
+    <ProjectReference Include="..\Wex.TransactionReporting.Infrastructure\Wex.TransactionReporting.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

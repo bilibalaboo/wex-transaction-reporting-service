@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "dsfxQRmLWD4=",
+  "success": true,
+  "projectFilePath": "E:\\Interview\\Wex.TransactionReporting.Api\\src\\Wex.TransactionReporting.Application\\Wex.TransactionReporting.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\houji\\.nuget\\packages\\fluentvalidation\\12.0.0\\fluentvalidation.12.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,5 +1,5 @@
 # Rule: Architecture & API Design
-- **Clean Architecture:** Strictly separate Domain, Application, Infrastructure, and API layers.
+- **Clean Architecture:** Strictly separate Domain, Application, Infrastructure, and API layers. Direct Service/Handler classes (**NO MediatR**)
 - **Minimal APIs:** Use Minimal APIs (`MapGet`, `MapPost`, `MapGroup`) for the presentation layer instead of traditional MVC Controllers. Use extension methods to logically group endpoint registrations.
 - **Native AOT Compatibility:** The application must be fully compatible with Native AOT compilation. **Strictly avoid reflection** in the business logic and API layers.
 - **JSON Serialization:** Must use `System.Text.Json` with Source Generators (`JsonSerializerContext`) for all API requests/responses to ensure Native AOT compatibility and zero-reflection serialization.
