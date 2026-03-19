@@ -11,7 +11,8 @@
       "Bash(dotnet build:*)",
       "Bash(grep:*)",
       "Bash(find C:/Users/houji/.nuget/packages/serilog.sinks.opentelemetry/ -name *.cs)",
-      "Bash(find C:/Users/houji/.nuget/packages/serilog.sinks.opentelemetry/ -name OtlpProtocol*)"
+      "Bash(find C:/Users/houji/.nuget/packages/serilog.sinks.opentelemetry/ -name OtlpProtocol*)",
+      "Bash(dotnet test:*)"
     ]
   }
 }
